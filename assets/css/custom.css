@@ -1,0 +1,62 @@
+/* Church list */
+
+.church-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.church-item {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.church-item h3 {
+  margin-top: 0;
+  color: #2b2b2b;
+}
+
+/* Big father */
+
+.bigfathers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.bigfather-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.2s;
+}
+
+.bigfather-card:hover {
+  transform: translateY(-4px);
+}
+
+.bigfather-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+/* Front page */
+
+.view-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #4169e1;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+
+.view-btn:hover {
+  background: #2748b3;
+}
