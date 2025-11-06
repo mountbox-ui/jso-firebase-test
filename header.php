@@ -21,7 +21,7 @@
       if ( has_custom_logo() ) {
         the_custom_logo();
       } else {
-        echo '<a href="' . esc_url( home_url( '/' ) ) . '" style="font-size:22px; font-weight:700; color:#222; text-decoration:none;">' . get_bloginfo('name') . '</a>';
+        echo '<a href="' . esc_url( home_url( '/wp-content/uploads/2025/11/Logo.png' ) ) . '" style="font-size:22px; font-weight:700; color:#222; text-decoration:none;">' . get_bloginfo('name') . '</a>';
       }
     ?>
   </div>
