@@ -29,6 +29,13 @@ echo do_shortcode('[firebase_bigfathers]');
       <p style="color:#666;">Find all Cor-Episcopa listed across the JSO community.</p>
       <a href="<?php echo site_url('/cor-episcopas'); ?>" class="view-btn">View Cor-Episcopa</a>
     </div>
+
+    <div class="home-card" style="background:#fff; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:40px;">
+      <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/Vector.png' ); ?>" alt="Church" style="width:80px; margin-bottom:15px;">
+      <h2>Rambans</h2>
+      <p style="color:#666;">Find all Rambans listed across the JSO community.</p>
+      <a href="<?php echo site_url('/rambans'); ?>" class="view-btn">View Rambans</a>
+    </div>
   </section>
 </main>
 
