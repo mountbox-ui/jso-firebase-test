@@ -87,23 +87,25 @@ function shortcode_firebase_churches() {
         const filterText = document.getElementById('filterText');
 
         function filterChurches() {
-            const filter = searchInput.value.toLowerCase();
-            const selectedDiocese = dioceseFilter.value.toLowerCase();
+    const filter = searchInput.value.toLowerCase();
+    const selectedDiocese = dioceseFilter.value.toLowerCase();
 
-            items.forEach(item => {
-                const name = item.querySelector('.church-name').textContent.toLowerCase();
-                const diocese = item.querySelector('.church-diocese').textContent.toLowerCase();
+    items.forEach(item => {
+        const name = item.querySelector('.church-name').textContent.toLowerCase();
+        const diocese = item.querySelector('.church-diocese').textContent.toLowerCase();
 
-                const matchesSearch = name.includes(filter) || address.includes(filter);
-                const matchesDiocese = selectedDiocese === '' || diocese === selectedDiocese;
+        // Only use the name and diocese for filtering
+        const matchesSearch = name.includes(filter);
+        const matchesDiocese = selectedDiocese === '' || diocese === selectedDiocese;
 
-                if(matchesSearch && matchesDiocese) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        if(matchesSearch && matchesDiocese) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
         }
+    });
+}
+
 
         searchInput.addEventListener('keyup', filterChurches);
 
@@ -132,6 +134,8 @@ function shortcode_firebase_churches() {
     return $output;
 }
 add_shortcode('firebase_churches', 'shortcode_firebase_churches');
+
+
 
 
 //  BIGFATHERS SHORTCODE
