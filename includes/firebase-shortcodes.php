@@ -280,3 +280,41 @@ function jso_ramban_list_shortcode() {
 add_shortcode('ramban_list', 'jso_ramban_list_shortcode');
 
 
+//  PRIEST LIST SHORTCODE
+function jso_priest_list_shortcode() {
+  $priest = fetch_firebase_data('clergy/priest');
+
+  ob_start();
+
+  if (empty($priest)) {
+    echo '<p style="text-align:center;">No Priest found.</p>';
+  } else {
+    echo '<section style="padding:80px 10%; text-align:center;">';
+    echo '<h2 style="font-size:32px; margin-bottom:40px;">Priest</h2>';
+    echo '<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:30px;">';
+
+    foreach ($priest as $id => $meta) {
+      $name  = isset($meta['fatherName']) ? esc_html($meta['fatherName']) : 'Unknown';
+      $vicar = isset($meta['vicarAt']) ? esc_html($meta['vicarAt']) : '';
+      $image = isset($meta['image']) ? esc_url($meta['image']) : '';
+      $detail_url = site_url('/priest/?id=' . urlencode($id));
+
+      echo '<div style="background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:20px;">';
+      if ($image) {
+        echo '<img src="' . $image . '" alt="' . $name . '" style="width:100%; height:240px; object-fit:cover; border-radius:12px; margin-bottom:15px;">';
+      }
+      echo '<h3 style="font-size:20px; margin-bottom:8px;">' . $name . '</h3>';
+      echo '<p style="font-size:20px; margin-bottom:8px;">' . $vicar . '</p>';
+      echo '<a href="' . esc_url($detail_url) . '" style="color:#0073aa; text-decoration:none;">View Details →</a>';
+      echo '</div>';
+    }
+
+    echo '</div>';
+    echo '</section>';
+  }
+
+  return ob_get_clean();
+}
+add_shortcode('priest_list', 'jso_priest_list_shortcode');
+
+
