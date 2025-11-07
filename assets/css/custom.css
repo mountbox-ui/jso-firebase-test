@@ -60,3 +60,10 @@
 .view-btn:hover {
   background: #2748b3;
 }
+
+/* Logo */
+
+.custom-logo {
+  height: 100px;
+  width: auto;
+}

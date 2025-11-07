@@ -23,7 +23,7 @@ get_header();
     </div>
 
     <div class="home-card" style="background:#fff; border-radius:16px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:40px;">
-      <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/B Father.png' ); ?>" alt="Big Fathers" style="width:80px; margin-bottom:15px;">
+      <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/B-Father.png' ); ?>" alt="Big Fathers" style="width:80px; margin-bottom:15px;">
       <h2>Big Fathers</h2>
       <p style="color:#666;">Meet the big fathers, see their profiles and contact info.</p>
       <a href="<?php echo site_url('big-fathers'); ?>" class="view-btn">View Big Fathers</a>
