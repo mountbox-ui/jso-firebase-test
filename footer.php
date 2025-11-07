@@ -15,6 +15,18 @@
   </div>
 </footer>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const menuToggle = document.querySelector(".menu-toggle");
+  const navigation = document.querySelector(".main-navigation");
+
+  menuToggle.addEventListener("click", function() {
+    navigation.classList.toggle("active");
+  });
+});
+</script>
+
+
 <?php wp_footer(); ?>
 </body>
 </html>

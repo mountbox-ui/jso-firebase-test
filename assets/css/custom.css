@@ -1,3 +1,146 @@
+/* Body */
+main {
+  max-width: 1200px;  /* Set your custom width */
+  margin: auto !important;      /* Centers the entire layout */
+  background-color: #fff; /* Optional */
+}
+
+/* === HEADER STYLES === */
+.site-header {
+  background: linear-gradient(124deg, #021026 2.32%, #002053 99.01%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* === NAVIGATION === */
+.main-navigation {
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu a {
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.nav-menu a:hover {
+  color: #0073aa;
+}
+
+/* === SUB-MENU === */
+.nav-menu li {
+  position: relative;
+}
+
+.nav-menu .sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+  border-radius: 6px;
+}
+
+.nav-menu .sub-menu li {
+  width: 200px;
+}
+
+.nav-menu li:hover > .sub-menu {
+  display: block;
+}
+
+.sub-menu a {
+  display: block;
+  padding: 10px 20px;
+  font-size: 15px;
+  color: #222;
+}
+
+/* === MOBILE MENU === */
+.menu-toggle {
+  display: none;
+  font-size: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .main-navigation {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 8%;
+    background: #fff;
+    width: 240px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .main-navigation.active {
+    display: block;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .nav-menu li {
+    text-align: left;
+    width: 100%;
+  }
+
+  .nav-menu a {
+    display: block;
+    padding: 12px 20px;
+  }
+
+  .nav-menu .sub-menu {
+    position: static;
+    box-shadow: none;
+    padding-left: 15px;
+  }
+}
+
+
 /* Church list */
 
 .church-list {
@@ -20,7 +163,7 @@
 
 .bigfathers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 25px;
 }
 
@@ -70,7 +213,7 @@
 
 /* Nav */
 
-nav ul{
+/* nav ul{
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -86,4 +229,4 @@ nav ul li a{
   color: #222;
   font-weight: 600;
   font-size: 16px;
-}
+} */

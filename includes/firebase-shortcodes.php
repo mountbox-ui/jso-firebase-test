@@ -356,4 +356,36 @@ function jso_deacons_list_shortcode() {
 add_shortcode('deacons_list', 'jso_deacons_list_shortcode');
 
 
+//  DIOCESE LIST SHORTCODE
+
+function jso_diocese_list_shortcode() {
+  $dioceses = fetch_firebase_data('diocese');
+
+  ob_start();
+
+  if (empty($dioceses)) {
+    echo '<p style="text-align:center;">No Diocese found.</p>';
+  } else {
+    echo '<section style="padding:60px 10%; display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:30px;">';
+
+    foreach ($dioceses as $id => $diocese) {
+      $name = isset($diocese['dioceseName']) ? esc_html($diocese['dioceseName']) : 'Unnamed Diocese';
+      $churchCount = isset($diocese['churches']) && is_array($diocese['churches']) ? count($diocese['churches']) : 0;
+      $detail_url = site_url('/diocese-details/?id=' . urlencode($id));
+
+      echo '<div style="background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.05); padding:30px; text-align:center;">';
+      echo '<h2 style="font-size:22px; margin-bottom:10px;">' . $name . '</h2>';
+      echo '<p style="color:#666;">' . $churchCount . ' Churches</p>';
+     $detail_url = site_url('/diocese/?id=' . urlencode($id));
+     echo '<a href="' . esc_url($detail_url) . '" style="display:inline-block; margin-top:10px; color:#0073aa; text-decoration:none; font-weight:500;">View Details →</a>';
+      echo '</div>';
+    }
+
+    echo '</section>';
+  }
+
+  return ob_get_clean();
+}
+add_shortcode('diocese_list', 'jso_diocese_list_shortcode');
+
 
