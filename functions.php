@@ -157,5 +157,11 @@ add_action( 'wp_enqueue_scripts', 'jso_scripts' );
 require_once get_template_directory() . '/includes/firebase-fetch.php';
 require_once get_template_directory() . '/includes/firebase-shortcodes.php';
 
+function theme_custom_fonts() {
+	wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Manrope:wght@700&display=swap', false);
+  }
+  add_action('wp_enqueue_scripts', 'theme_custom_fonts');
+  
+
 
 

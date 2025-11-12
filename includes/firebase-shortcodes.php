@@ -72,7 +72,7 @@ function shortcode_firebase_churches() {
         $output .= '<div class="church-item" 
                         data-name="' . esc_attr($church['churchName'] ?? 'Unknown Church') . '" 
                         data-diocese="' . esc_attr($church['diocese'] ?? 'N/A') . '" 
-                        data-primary-vicar="' . esc_attr($church['primaryVicar'] ?? 'N/A') . '" 
+                        data-primary-vicar="' . esc_attr($church['vicarAt'] ?? 'N/A') . '" 
                         data-image="' . esc_attr(get_template_directory_uri() . '/assets/images/church.jpg') . '" 
                         style="margin-bottom:20px;padding:15px;border:1px solid #ddd;border-radius:8px;cursor:pointer;">
                         <h3 class="church-name" style="margin-bottom:5px;">' . esc_html($church['churchName'] ?? 'Unknown Church') . '</h3>

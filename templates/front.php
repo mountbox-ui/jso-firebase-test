@@ -1,7 +1,7 @@
 <?php
 /**
- * Template Name: Home Page
- * Description: Clean homepage showing Firebase sections
+ * Template Name: Church Directory
+ * Description: Church Directory showing Firebase sections
  */
 get_header();
 ?>
@@ -11,7 +11,7 @@ get_header();
   <section class="home-intro" style="text-align:center; padding: 80px 20px;">
     <h4>Welcome to</h4>
     <h1 style="max-width: 600px; margin: 0 auto; color: #666;">
-      JSO community
+      JSO Church Directory
     </h1>
   </section>
 
