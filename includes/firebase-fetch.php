@@ -3,7 +3,7 @@
 
 if (!function_exists('fetch_firebase_data')) {
     function fetch_firebase_data($path) {
-        $firebase_url = 'https://sitjsochurch-default-rtdb.firebaseio.com/' . $path . '.json';
+        $firebase_url = 'https://jsochurch-7c956-default-rtdb.firebaseio.com/' . $path . '.json';
         $response = wp_remote_get($firebase_url);
 
         if (is_wp_error($response)) {
@@ -14,3 +14,5 @@ if (!function_exists('fetch_firebase_data')) {
         return json_decode($body, true);
     }
 }
+
+
