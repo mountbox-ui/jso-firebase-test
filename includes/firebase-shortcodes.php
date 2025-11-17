@@ -1,38 +1,12 @@
 <?php
-// includes/firebase-shortcodes.php
-
 //  CHURCH SHORTCODE
 error_log('firebase-shortcodes.php loaded');
-
-// function shortcode_firebase_churches() {
-//     $churches = fetch_firebase_data('church');
-
-//     if (empty($churches)) {
-//         return '<p style="text-align:center>No church data found.</p>';
-//     }
-
-//     $output = '<div class="church-list">';
-//     foreach ($churches as $key => $church) {
-//         $output .= '<div class="church-item" style="margin-bottom:20px;">';
-//         $output .= '<h3>' . esc_html($church['churchName'] ?? 'Unknown Church') . '</h3>';
-//         $output .= '<p><strong>Diocese:</strong> ' . esc_html($church['diocese'] ?? 'N/A') . '</p>';
-//         // if ($image) {
-//         //     $output .= '<img src="' . $image . '" alt="' . $name . '">';
-//         // }
-
-//         $output .= '</div>';
-//     }
-//     $output .= '</div>';
-
-//     return $output;
-// }
-// add_shortcode('firebase_churches', 'shortcode_firebase_churches');
 
 function shortcode_firebase_churches() {
     $churches = fetch_firebase_data('church');
 
     if (empty($churches)) {
-        return '<p>No church data found.</p>';
+        return '<p class="text-center text-gray-500">No church data found.</p>';
     }
 
     // Collect unique dioceses
@@ -45,112 +19,173 @@ function shortcode_firebase_churches() {
     $dioceses = array_unique($dioceses);
     sort($dioceses);
 
-    // Start output
-    $output = '<div class="church-search-container">';
+    ob_start();
+    ?>
 
-    // Search + Filter Row
-    $output .= '
-    <div class="search-filter-row" style="display:flex;gap:10px;align-items:center;margin-bottom:20px;">
-        <input type="text" id="churchSearchInput" placeholder="Search by Diocese..." style="flex:1;padding:10px;border:1px solid #ccc;border-radius:5px;">
-        <div class="filter-dropdown-wrapper" style="flex:1;position:relative;">
-            <button id="filterToggle" style="width:100%;padding:10px 15px;border:1px solid #ccc;background:#fff;border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-                <span id="filterText">Select Diocese</span>
-                <span style="font-size:14px;">&#9660;</span>
-            </button>
-            <select id="churchDioceseFilter" style="position:absolute;top:100%;left:0;width:100%;margin-top:5px;padding:8px;border:1px solid #ccc;border-radius:5px;display:none;z-index:10;">
-                <option value="">All Dioceses</option>';
-    foreach ($dioceses as $diocese) {
-        $output .= '<option value="' . esc_attr($diocese) . '">' . esc_html($diocese) . '</option>';
-    }
-    $output .= '</select>
-        </div>
-    </div>';
+<div class="max-w-3xl mx-auto">
 
-    // Church List
-    $output .= '<div id="churchList" class="church-list">';
-    foreach ($churches as $church) {
-        $output .= '<div class="church-item" 
-                        data-name="' . esc_attr($church['churchName'] ?? 'Unknown Church') . '" 
-                        data-diocese="' . esc_attr($church['diocese'] ?? 'N/A') . '" 
-                        data-primary-vicar="' . esc_attr($church['vicarAt'] ?? 'N/A') . '" 
-                        data-image="' . esc_attr(get_template_directory_uri() . '/assets/images/church.jpg') . '" 
-                        style="margin-bottom:20px;padding:15px;border:1px solid #ddd;border-radius:8px;cursor:pointer;">
-                        <h3 class="church-name" style="margin-bottom:5px;">' . esc_html($church['churchName'] ?? 'Unknown Church') . '</h3>
-                        <p><strong>Diocese:</strong> <span class="church-diocese">' . esc_html($church['diocese'] ?? 'N/A') . '</span></p>
-                    </div>';
-    }
-    $output .= '</div>';
+    <!-- Search + Filter Row -->
+    <div class="flex gap-3 mb-5 mt-5">
+        <!-- Search -->
+        <input 
+            type="text" 
+            id="churchSearchInput" 
+            placeholder="Search Church or Diocese..." 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:outline-none"
+        />
 
-    // Modal
-    $output .= '
-<div id="churchModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:9999;">
-    <div style="background:#fff;padding:20px;border-radius:10px;max-width:500px;width:200%;position:relative;text-align:center;">
-        <span id="modalClose" style="position:absolute;top:10px;right:15px;font-size:20px;font-weight:bold;cursor:pointer;">&times;</span>
-        <img id="modalChurchImage" src="' . get_template_directory_uri() . '/assets/images/church.jpg" alt="Church Image" style="max-width:120px;margin-bottom:15px;border-radius:50%;">
-        <h2 id="modalChurchName" style="margin-bottom:10px;"></h2>
-        <p><strong>Diocese:</strong> <span id="modalDiocese"></span></p>
-        <p><strong>Primary Vicar:</strong> <span id="modalPrimaryVicar"></span></p>
+        <!-- Dropdown -->
+        <select 
+            id="dioceseFilter" 
+            class="px-3 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-gray-500"
+        >
+            <option value="">All Dioceses</option>
+            <?php foreach ($dioceses as $d): ?>
+                <option value="<?php echo esc_attr($d); ?>">
+                    <?php echo esc_html($d); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
-</div>';
-    // JS
-    $output .= "
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('churchSearchInput');
-        const dioceseFilter = document.getElementById('churchDioceseFilter');
-        const items = document.querySelectorAll('#churchList .church-item');
-        const filterToggle = document.getElementById('filterToggle');
-        const filterText = document.getElementById('filterText');
-        const modal = document.getElementById('churchModal');
-        const modalClose = document.getElementById('modalClose');
-        const modalChurchName = document.getElementById('modalChurchName');
-        const modalDiocese = document.getElementById('modalDiocese');
-        const modalPrimaryVicar = document.getElementById('modalPrimaryVicar');
-        const modalChurchImage = document.getElementById('modalChurchImage');
 
-        function filterChurches() {
-            const searchVal = searchInput.value.toLowerCase();
-            const selectedDiocese = dioceseFilter.value.toLowerCase();
-            items.forEach(item => {
-                const name = item.querySelector('.church-name').textContent.toLowerCase();
-                const diocese = item.querySelector('.church-diocese').textContent.toLowerCase();
-                item.style.display = (name.includes(searchVal) && (selectedDiocese === '' || diocese === selectedDiocese)) ? '' : 'none';
-            });
-        }
+    <!-- LIST -->
+    <ul role="list" id="churchList" class="divide-y divide-gray-200">
 
-        searchInput.addEventListener('keyup', filterChurches);
-        filterToggle.addEventListener('click', function() {
-            dioceseFilter.style.display = (dioceseFilter.style.display === 'block') ? 'none' : 'block';
-        });
-        dioceseFilter.addEventListener('change', function() {
-            filterText.textContent = dioceseFilter.value || 'Select Diocese';
-            filterChurches();
-            dioceseFilter.style.display = 'none';
-        });
-        document.addEventListener('click', function(e) {
-            if (!filterToggle.contains(e.target) && !dioceseFilter.contains(e.target)) dioceseFilter.style.display = 'none';
-        });
+        <?php foreach ($churches as $church): ?>
+
+            <?php 
+                $name = $church['churchName'] ?? 'Unknown Church';
+                $diocese = $church['diocese'] ?? '';
+                $vicar = $church['vicarAt'] ?? '';
+
+                // ⬇ Fallback image from Firebase → if empty → use church.jpg
+                $image = (!empty($church['image'])) 
+                    ? $church['image'] 
+                    : get_template_directory_uri() . '/assets/images/church.jpg';
+            ?>
+
+            <li class="flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50 transition item-row"
+                data-name="<?php echo esc_attr(strtolower($name)); ?>"
+                data-diocese="<?php echo esc_attr(strtolower($diocese)); ?>"
+                data-vicar="<?php echo esc_attr($vicar); ?>"
+                data-image="<?php echo esc_attr($image); ?>"
+            >
+                <div class="flex min-w-0 gap-x-4">
+                    <img src="<?php echo esc_url($image); ?>" 
+                        class="h-12 w-12 flex-none rounded-full bg-gray-100 object-cover" />
+
+                    <div class="min-w-0 flex-auto">
+                        <p class="text-sm font-semibold text-gray-900">
+                            <?php echo esc_html($name); ?>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="hidden sm:flex sm:flex-col sm:items-end">
+                    <p class="text-sm text-gray-700">
+                        <?php echo esc_html($diocese); ?>
+                    </p>
+                </div>
+            </li>
+
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+
+<!-- MODAL -->
+<div id="churchModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-xl relative">
+
+        <button id="modalClose" class="absolute rounded-full top-3 right-3 p-3 text-2xl font-bold text-gray-600 hover:text-black">
+            &times;
+        </button>
+
+        <img id="modalImage" class="w-24 h-24 mx-auto rounded-full mb-4 object-cover" />
+
+        <h2 id="modalName" class="text-xl font-semibold text-gray-900 text-center"></h2>
+
+        <!-- <p class="text-center text-gray-700 mt-2">
+            <strong>Diocese:</strong> <span id="modalDiocese"></span>
+        </p>
+
+        <p class="text-center text-gray-700 mt-1">
+            <strong>Vicar:</strong> <span id="modalVicar"></span>
+        </p> -->
+
+        <p class="text-center text-gray-700 mt-2">
+            <span id="modalDiocese"></span>
+        </p>
+
+        <p class="text-center text-gray-700 mt-1">
+            <span id="modalVicar"></span>
+        </p>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Elements
+    const searchInput = document.getElementById('churchSearchInput');
+    const dioceseFilter = document.getElementById('dioceseFilter');
+    const items = document.querySelectorAll('#churchList .item-row');
+
+    const modal = document.getElementById('churchModal');
+    const closeBtn = document.getElementById('modalClose');
+    const modalName = document.getElementById('modalName');
+    const modalDiocese = document.getElementById('modalDiocese');
+    const modalVicar = document.getElementById('modalVicar');
+    const modalImage = document.getElementById('modalImage');
+
+    // FILTER FUNCTION
+    function filterList() {
+        const search = searchInput.value.toLowerCase();
+        const selected = dioceseFilter.value.toLowerCase();
 
         items.forEach(item => {
-            item.addEventListener('click', function() {
-                modalChurchName.textContent = this.dataset.name;
-                modalDiocese.textContent = this.dataset.diocese;
-                modalPrimaryVicar.textContent = this.dataset.primaryVicar;
-                modalChurchImage.src = this.dataset.image;
-                modal.style.display = 'flex';
-            });
+            const name = item.dataset.name;
+            const diocese = item.dataset.diocese;
+
+            const matchSearch = name.includes(search) || diocese.includes(search);
+            const matchDiocese = selected === "" || diocese === selected;
+
+            item.style.display = (matchSearch && matchDiocese) ? "flex" : "none";
         });
+    }
 
-        modalClose.addEventListener('click', () => modal.style.display = 'none');
-        window.addEventListener('click', (e) => { if(e.target === modal) modal.style.display = 'none'; });
+    searchInput.addEventListener("input", filterList);
+    dioceseFilter.addEventListener("change", filterList);
+
+    // OPEN MODAL
+    items.forEach(item => {
+        item.addEventListener("click", () => {
+            modalName.textContent = item.dataset.name;
+            modalDiocese.textContent = item.dataset.diocese;
+            modalVicar.textContent = item.dataset.vicar;
+            modalImage.src = item.dataset.image;
+
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        });
     });
-    </script>";
 
-    $output .= '</div>';
+    // CLOSE MODAL
+    closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.add("hidden");
+    });
 
-    return $output;
+});
+</script>
+
+<?php
+return ob_get_clean();
 }
 add_shortcode('firebase_churches', 'shortcode_firebase_churches');
+
+
 
 
 

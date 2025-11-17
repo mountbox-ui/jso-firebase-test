@@ -53,6 +53,19 @@ function jso_setup() {
 		)
 	);
 
+	function jso_enqueue_scripts() {
+    // JS for church list
+    wp_enqueue_script(
+        'church-js',
+        get_template_directory_uri() . '/assets/js/firebase-church.js',
+        array(), 
+        false, 
+        true // loads in footer
+    );
+}
+	add_action('wp_enqueue_scripts', 'jso_enqueue_scripts');
+
+
 	/*
 		* Switch default core markup for search form, comment form, and comments
 		* to output valid HTML5.
@@ -142,6 +155,7 @@ function jso_scripts() {
 	wp_style_add_data( 'jso-style', 'rtl', 'replace' );
 
     wp_enqueue_style( 'jso-custom-style', get_template_directory_uri() . '/assets/css/custom.css', array(), _S_VERSION );
+	wp_enqueue_style( 'jso-custom-style', get_template_directory_uri() . '/assets/css/main.css', array(), _S_VERSION );
 	wp_enqueue_script( 'jso-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
