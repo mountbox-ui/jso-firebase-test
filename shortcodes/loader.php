@@ -17,6 +17,7 @@ $shortcodes_dir = get_template_directory() . '/shortcodes/';
 $shortcode_files = array(
     'church-shortcode.php',
     'metropolitians-shortcode.php',
+    'corepiscopa-shortcode.php',
 );
 
 // Load each shortcode file
