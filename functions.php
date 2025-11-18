@@ -173,6 +173,12 @@ require_once get_template_directory() . '/shortcodes/loader.php';
 require_once get_template_directory() . '/includes/firebase-fetch.php';
 // require_once get_template_directory() . '/includes/firebase-shortcodes.php';
 
+// Disable WordPress auto <p> and <br> inside shortcodes
+remove_filter( 'the_content', 'wpautop' );
+add_filter( 'the_content', 'wpautop', 12 );
+remove_filter( 'the_content', 'shortcode_unautop' );
+
+
 function theme_custom_fonts() {
 	wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Manrope:wght@700&display=swap', false);
   }

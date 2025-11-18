@@ -16,7 +16,7 @@ function jso_metropolitans_list_shortcode()
     ?>
 
     <!-- SEARCH BAR -->
-    <div class="my-6">
+    <div class="mx-auto my-6 mt-5 mb-10">
         <div class="mb-6 sm:my-5 max-w-lg mx-auto">
             <input id="<?php echo $uniq; ?>_search" type="text" placeholder="Search Metropolitan..."
                 class="w-full px-8 py-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 my-6" />
