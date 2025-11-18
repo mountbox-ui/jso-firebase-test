@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "build": "npx tailwindcss -i ./assets/css/tailwind.css -o ./css/main.css --minify",
+  "dev": "npx tailwindcss -i ./assets/css/tailwind.css -o ./css/main.css --watch"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mountbox-ui/jso-firebase-test.git"

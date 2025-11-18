@@ -1,9 +1,12 @@
 module.exports = {
   content: [
-    "./*.php",
     "./**/*.php",
-    "./assets/js/*.js",
-    "./assets/js/**/*.js",
+    "./**/*.html",
+    "./**/*.js",
+    "./css/**/*.css"
+  ],
+  safelist: [
+    'btn', 'btn-primary', 'btn-secondary', 'btn-outline', 'btn-sm', 'btn-lg'
   ],
   theme: {
     extend: {},

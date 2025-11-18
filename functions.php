@@ -151,11 +151,12 @@ add_action( 'widgets_init', 'jso_widgets_init' );
  * Enqueue scripts and styles.
  */
 function jso_scripts() {
-	wp_enqueue_style( 'jso-style', get_stylesheet_uri(), array(), _S_VERSION );
+	// wp_enqueue_style( 'jso-style', get_stylesheet_uri(), array(), _S_VERSION );
 	wp_style_add_data( 'jso-style', 'rtl', 'replace' );
 
     wp_enqueue_style( 'jso-custom-style', get_template_directory_uri() . '/assets/css/custom.css', array(), _S_VERSION );
 	wp_enqueue_style( 'jso-custom-style', get_template_directory_uri() . '/assets/css/main.css', array(), _S_VERSION );
+	wp_enqueue_style( 'jso-custom-style', get_template_directory_uri() . '/assets/css/tailwind.css', array(), _S_VERSION );
 	wp_enqueue_script( 'jso-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
@@ -168,13 +169,17 @@ add_action( 'wp_enqueue_scripts', 'jso_scripts' );
 
 
 // Include Firebase helpers
+require_once get_template_directory() . '/shortcodes/loader.php';
 require_once get_template_directory() . '/includes/firebase-fetch.php';
-require_once get_template_directory() . '/includes/firebase-shortcodes.php';
+// require_once get_template_directory() . '/includes/firebase-shortcodes.php';
 
 function theme_custom_fonts() {
 	wp_enqueue_style('google-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Manrope:wght@700&display=swap', false);
   }
   add_action('wp_enqueue_scripts', 'theme_custom_fonts');
+
+  
+
   
 
 
