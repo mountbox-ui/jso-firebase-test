@@ -1,15 +1,14 @@
 <?php
-
-//  RAMBAN LIST SHORTCODE
-function jso_ramban_list_shortcode()
+//  DEACONS LIST SHORTCODE
+function jso_deacons_list_shortcode()
 {
-    $ramban = fetch_firebase_data('clergy/ramban');
+    $deacons = fetch_firebase_data('clergy/deacons');
 
-    $placeholder = get_template_directory_uri() . '/assets/images/ramban.jpg';
+    $placeholder = get_template_directory_uri() . '/assets/images/deacons.jpg';
     $uniq = uniqid('metro_');
 
-    if (empty($ramban)) {
-        return '<p class="text-center text-gray-500">No Ramban found.</p>';
+    if (empty($deacons)) {
+        return '<p class="text-center text-gray-500">No Deacons found.</p>';
     }
 
     ob_start();
@@ -17,15 +16,15 @@ function jso_ramban_list_shortcode()
             <!-- SEARCH BAR -->
             <div class="my-6">
                 <div class="mb-6 sm:my-5 max-w-lg mx-auto">
-                    <input id="<?php echo $uniq; ?>_search" type="text" placeholder="Search Ramban..."
+                    <input id="<?php echo $uniq; ?>_search" type="text" placeholder="Search Deacons..."
                         class="w-full px-8 py-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 my-6" />
                 </div>
             </div>
 
             <ul id="<?php echo $uniq; ?>_list" role="list" class="divide-y divide-gray-100 transition-all">
 
-                <?php foreach ($ramban as $id => $m):
-                    $name = $m['fatherName'] ?? 'Unknown ramban';
+                <?php foreach ($deacons as $id => $m):
+                    $name = $m['fatherName'] ?? 'Unknown Deacons';
                     $role = $m['vicarAt'] ?? '';
                     $image = $m['image'] ?? $placeholder;
                     $email = $m['emailId'] ?? '';
@@ -55,7 +54,7 @@ function jso_ramban_list_shortcode()
             </ul>
 
             <p id="<?php echo $uniq; ?>_no_results" class="hidden text-center text-gray-500 mt-4">
-                No matching ramban found.
+                No matching priest found.
             </p>
 
 
@@ -146,86 +145,7 @@ function jso_ramban_list_shortcode()
                 <?php
                 return ob_get_clean();
 }
-add_shortcode('ramban_list', 'jso_ramban_list_shortcode');
-
-
-//  PRIEST LIST SHORTCODE
-function jso_priest_list_shortcode()
-{
-    $priest = fetch_firebase_data('clergy/priest');
-
-    ob_start();
-
-    if (empty($priest)) {
-        echo '<p style="text-align:center;">No Priest found.</p>';
-    } else {
-        echo '<section style="padding:80px 10%; text-align:center;">';
-        echo '<h2 style="font-size:32px; margin-bottom:40px;">Priests</h2>';
-        echo '<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:30px;">';
-
-        foreach ($priest as $id => $meta) {
-            $name = isset($meta['fatherName']) ? esc_html($meta['fatherName']) : 'Unknown';
-            $vicar = isset($meta['vicarAt']) ? esc_html($meta['vicarAt']) : '';
-            $image = isset($meta['image']) ? esc_url($meta['image']) : '';
-            $detail_url = site_url('/priest/?id=' . urlencode($id));
-
-            echo '<div style="background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:20px;">';
-            if ($image) {
-                echo '<img src="' . $image . '" alt="' . $name . '" style="width:100%; height:240px; object-fit:cover; border-radius:12px; margin-bottom:15px;">';
-            }
-            echo '<h3 style="font-size:20px; margin-bottom:8px;">' . $name . '</h3>';
-            echo '<p style="font-size:20px; margin-bottom:8px;">' . $vicar . '</p>';
-            echo '<a href="' . esc_url($detail_url) . '" style="color:#0073aa; text-decoration:none;">View Details →</a>';
-            echo '</div>';
-        }
-
-        echo '</div>';
-        echo '</section>';
-    }
-
-    return ob_get_clean();
-}
-add_shortcode('priest_list', 'jso_priest_list_shortcode');
-
-
-//  DEACONS LIST SHORTCODE
-function jso_deacons_list_shortcode()
-{
-    $deacons = fetch_firebase_data('clergy/deacons');
-
-    ob_start();
-
-    if (empty($deacons)) {
-        echo '<p style="text-align:center;">No Deacons found.</p>';
-    } else {
-        echo '<section style="padding:80px 10%; text-align:center;">';
-        echo '<h2 style="font-size:32px; margin-bottom:40px;">Deacons</h2>';
-        echo '<div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:30px;">';
-
-        foreach ($deacons as $id => $meta) {
-            $name = isset($meta['fatherName']) ? esc_html($meta['fatherName']) : 'Unknown';
-            $vicar = isset($meta['vicarAt']) ? esc_html($meta['vicarAt']) : '';
-            $image = isset($meta['image']) ? esc_url($meta['image']) : '';
-            $detail_url = site_url('/deacon/?id=' . urlencode($id));
-
-            echo '<div style="background:#fff; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:20px;">';
-            if ($image) {
-                echo '<img src="' . $image . '" alt="' . $name . '" style="width:100%; height:240px; object-fit:cover; border-radius:12px; margin-bottom:15px;">';
-            }
-            echo '<h3 style="font-size:20px; margin-bottom:8px;">' . $name . '</h3>';
-            echo '<p style="font-size:20px; margin-bottom:8px;">' . $vicar . '</p>';
-            echo '<a href="' . esc_url($detail_url) . '" style="color:#0073aa; text-decoration:none;">View Details →</a>';
-            echo '</div>';
-        }
-
-        echo '</div>';
-        echo '</section>';
-    }
-
-    return ob_get_clean();
-}
 add_shortcode('deacons_list', 'jso_deacons_list_shortcode');
-
 
 // //  DIOCESE LIST SHORTCODE
 

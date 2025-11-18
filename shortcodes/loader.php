@@ -19,6 +19,8 @@ $shortcode_files = array(
     'metropolitians-shortcode.php',
     'corepiscopa-shortcode.php',
     'ramban-shortcode.php',
+    'priest-shortcode.php',
+    'deacons-shortcode.php',
 );
 
 // Load each shortcode file

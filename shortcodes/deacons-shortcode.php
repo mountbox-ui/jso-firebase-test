@@ -1,14 +1,14 @@
 <?php
-//  PRIEST LIST SHORTCODE
-function jso_priest_list_shortcode()
+//  DEACONS LIST SHORTCODE
+function jso_deacons_list_shortcode()
 {
-    $priest = fetch_firebase_data('clergy/priest');
+    $deacons = fetch_firebase_data('clergy/deacons');
 
-    $placeholder = get_template_directory_uri() . '/assets/images/priest.jpg';
+    $placeholder = get_template_directory_uri() . '/assets/images/deacons.jpg';
     $uniq = uniqid('metro_');
 
-    if (empty($priest)) {
-        return '<p class="text-center text-gray-500">No Priest found.</p>';
+    if (empty($deacons)) {
+        return '<p class="text-center text-gray-500">No Deacons found.</p>';
     }
 
     ob_start();
@@ -16,15 +16,15 @@ function jso_priest_list_shortcode()
             <!-- SEARCH BAR -->
             <div class="my-6">
                 <div class="mb-6 sm:my-5 max-w-lg mx-auto">
-                    <input id="<?php echo $uniq; ?>_search" type="text" placeholder="Search Priest..."
+                    <input id="<?php echo $uniq; ?>_search" type="text" placeholder="Search Deacons..."
                         class="w-full px-8 py-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 my-6" />
                 </div>
             </div>
 
             <ul id="<?php echo $uniq; ?>_list" role="list" class="divide-y divide-gray-100 transition-all">
 
-                <?php foreach ($priest as $id => $m):
-                    $name = $m['fatherName'] ?? 'Unknown Priest';
+                <?php foreach ($deacons as $id => $m):
+                    $name = $m['fatherName'] ?? 'Unknown Deacons';
                     $role = $m['vicarAt'] ?? '';
                     $image = $m['image'] ?? $placeholder;
                     $email = $m['emailId'] ?? '';
@@ -145,4 +145,4 @@ function jso_priest_list_shortcode()
                 <?php
                 return ob_get_clean();
 }
-add_shortcode('priest_list', 'jso_priest_list_shortcode');
+add_shortcode('deacons_list', 'jso_deacons_list_shortcode');
