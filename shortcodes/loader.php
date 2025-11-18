@@ -21,6 +21,7 @@ $shortcode_files = array(
     'ramban-shortcode.php',
     'priest-shortcode.php',
     'deacons-shortcode.php',
+    'diocese-shortcode.php',
 );
 
 // Load each shortcode file

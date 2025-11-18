@@ -259,6 +259,3 @@ function jso_diocese_list_shortcode()
                 return ob_get_clean();
 }
 add_shortcode('diocese_list', 'jso_diocese_list_shortcode');
-
-
-
