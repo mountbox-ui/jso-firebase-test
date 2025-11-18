@@ -16,6 +16,7 @@ $shortcodes_dir = get_template_directory() . '/shortcodes/';
 // Array of shortcode files to load
 $shortcode_files = array(
     'church-shortcode.php',
+    'metropolitians-shortcode.php',
 );
 
 // Load each shortcode file
