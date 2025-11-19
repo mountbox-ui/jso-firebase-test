@@ -18,7 +18,7 @@ function filterList() {
     });
 }
 
-searchInput.addEventListener("input", filterList);
+// searchInput.addEventListener("input", filterList);
 dioceseFilter.addEventListener("change", filterList);
 
 // Modal Logic

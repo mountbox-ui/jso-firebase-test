@@ -34,6 +34,9 @@ function jso_diocese_list_shortcode()
     foreach ($dioceses as $id => $diocese) {
         // defensive reading - adjust keys if your DB uses different keys
         $name = isset($diocese['dioceseName']) ? $diocese['dioceseName'] : (isset($diocese['name']) ? $diocese['name'] : 'Unnamed Diocese');
+        $metroplitianname = isset($diocese['dioceseMetropolitan']) ? $diocese['dioceseMetropolitan'] : (isset($diocese['dioceseMetropolitan']) ? $diocese['dioceseMetropolitan']
+         : 'Unnamed Diocese');
+        $number = isset($diocese['phoneNumber']) ? $diocese['phoneNumber'] : (isset($diocese['phoneNumber']) ? $diocese['phoneNumber'] : 'Pohne Number');
         $image = isset($diocese['image']) && !empty($diocese['image']) ? $diocese['image'] : $placeholder;
 
         // counts
@@ -42,12 +45,14 @@ function jso_diocese_list_shortcode()
 
         // output li item (Tailwind layout)
         echo '<li class="flex justify-between gap-x-6 py-5" data-diocese-id="' . esc_attr($id) . '">';
-        echo '<div class="flex min-w-0 gap-x-4">';
+        echo '<div class="flex min-w-0 gap-x-4 items-center">';
         // image
-        echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($name) . '" class="w-12 h-12 flex-none rounded-full bg-gray-50" onerror="this.onerror=null;this.src=\'' . esc_url($placeholder) . '\';" />';
+        echo '<img src="' . esc_url($image) . '" alt="' . esc_attr($name) . '" class="w-18 h-24 rounded-md flex-none  bg-gray-50" onerror="this.onerror=null;this.src=\'' . esc_url($placeholder) . '\';" />';
         // text block
         echo '<div class="min-w-0 flex-auto">';
         echo '<p class="text-sm/6 font-semibold text-gray-900">' . esc_html($name) . '</p>';
+        echo '<p class="text-sm font-regular text-gray-900">Diocese Metropolitan: ' . esc_html($metroplitianname) . '</p>';
+        echo '<p class="text-sm font-regular text-gray-900">Diocese Phone: ' . esc_html($number) . '</p>';
         // echo '<p class="mt-1 truncate text-xs/5 text-gray-500">' . esc_html($churchCount) . ' Churches • ' . esc_html($priestCount) . ' Priests</p>';
         echo '</div>';
         echo '</div>';

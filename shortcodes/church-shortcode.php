@@ -20,6 +20,8 @@ function shortcode_firebase_churches()
     $dioceses = array_unique($dioceses);
     sort($dioceses);
 
+    $vicar = isset($church['primaryVicar']) ? $church['primaryVicar'] : (isset($church['primaryVicar']) ? $church['primaryVicar'] : 'primaryVicar');
+
     ob_start();
     ?>
 
@@ -51,7 +53,7 @@ function shortcode_firebase_churches()
                 <?php
                 $name = $church['churchName'] ?? 'Unknown Church';
                 $diocese = $church['diocese'] ?? '';
-                $vicar = $church['vicarAt'] ?? '';
+                $vicar = $church['primaryVicar'] ?? '';
 
                 // ⬇ Fallback image from Firebase → if empty → use church.jpg
                 $image = (!empty($church['image']))
@@ -60,12 +62,13 @@ function shortcode_firebase_churches()
                 ?>
 
                 <li class="flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50 transition item-row"
-                    data-name="<?php echo esc_attr(strtolower($name)); ?>"
-                    data-diocese="<?php echo esc_attr(strtolower($diocese)); ?>" data-vicar="<?php echo esc_attr($vicar); ?>"
-                    data-image="<?php echo esc_attr($image); ?>">
-                    <div class="flex min-w-0 gap-x-4">
+                    data-name="<?php echo esc_attr($name); ?>" data-diocese="<?php echo esc_attr($diocese); ?>"
+                    data-vicar="<?php echo esc_attr($vicar); ?>" data-image="<?php echo esc_url($image); ?>"
+                    data-phone="<?php echo esc_attr($church['phoneNumber'] ?? ''); ?>"
+                    data-address="<?php echo esc_attr($church['address'] ?? ''); ?>">
+                    <div class="flex items-center min-w-0 gap-x-4">
                         <img src="<?php echo esc_url($image); ?>"
-                            class="h-12 w-12 flex-none rounded-full bg-gray-100 object-cover" />
+                            class="w-18 h-24 rounded-md flex-none bg-gray-100 object-cover" />
 
                         <div class="min-w-0 flex-auto">
                             <p class="text-sm font-semibold text-gray-900 mb-0">
@@ -76,12 +79,6 @@ function shortcode_firebase_churches()
                             </p>
                         </div>
                     </div>
-
-                    <!-- <div class="hidden sm:flex sm:flex-col sm:items-end">
-                        <p class="text-sm text-gray-700">
-                            <?php echo esc_html($diocese); ?>
-                        </p>
-                    </div> -->
                 </li>
 
             <?php endforeach; ?>
@@ -100,12 +97,21 @@ function shortcode_firebase_churches()
 
             <img id="modalImage" class="w-24 h-24 mx-auto rounded-full mb-4 object-cover" />
 
-            <h2 id="modalName" class="text-xl font-semibold text-gray-900 text-center"></h2>
+            <h2 id="modalName" class="text-xl font-semibold text-gray-900 text-center capitalize"></h2>
             <p class="text-center text-gray-700 mt-2">
                 <span id="modalDiocese"></span>
             </p>
-            <p class="text-center text-gray-700 mt-1">
+            <p class="text-center text-gray-700 mt-1 capitalize">
+                <span class="font-semibold">Church Vicar:</span>
                 <span id="modalVicar"></span>
+            </p>
+            <p class="text-center text-gray-700 mt-2">
+                <span class="font-semibold"></span>
+                <a id="modalPhone" href="#" class="text-blue-600 underline"></a>
+            </p>
+            <p class="text-center text-gray-700 mt-2">
+                <span class="font-semibold">Address:</span>
+                <span id="modalAddress"></span>
             </p>
         </div>
     </div>
@@ -128,19 +134,20 @@ function shortcode_firebase_churches()
 
             // FILTER FUNCTION
             function filterList() {
-                const search = searchInput.value.toLowerCase();
-                const selected = dioceseFilter.value.toLowerCase();
+                const search = searchInput.value.toLowerCase().trim();
+                const selected = dioceseFilter.value.toLowerCase().trim();
 
                 items.forEach(item => {
-                    const name = item.dataset.name;
-                    const diocese = item.dataset.diocese;
+                    const name = (item.dataset.name || "").toLowerCase();
+                    const diocese = (item.dataset.diocese || "").toLowerCase();
 
-                    const matchSearch = name.includes(search) || diocese.includes(search);
-                    const matchDiocese = selected === "" || diocese === selected;
+                    const matchSearch = !search || name.includes(search) || diocese.includes(search);
+                    const matchDiocese = !selected || diocese === selected;
 
                     item.style.display = (matchSearch && matchDiocese) ? "flex" : "none";
                 });
             }
+
 
             searchInput.addEventListener("input", filterList);
             dioceseFilter.addEventListener("change", filterList);
@@ -148,14 +155,29 @@ function shortcode_firebase_churches()
             // OPEN MODAL
             items.forEach(item => {
                 item.addEventListener("click", () => {
-                    modalName.textContent = item.dataset.name;
-                    modalDiocese.textContent = item.dataset.diocese;
-                    modalVicar.textContent = item.dataset.vicar;
+
+                    // Capitalize function
+                    const cap = (str) =>
+                        str ? str.replace(/\b\w/g, c => c.toUpperCase()) : '';
+
+                    modalName.textContent = cap(item.dataset.name);
+                    modalDiocese.textContent = cap(item.dataset.diocese);
+                    modalVicar.textContent = cap(item.dataset.vicar);
                     modalImage.src = item.dataset.image;
+
+                    // Phone + Address
+                    const phone = item.dataset.phone || '';
+                    const address = item.dataset.address || '';
+
+                    document.getElementById('modalPhone').textContent = phone;
+                    document.getElementById('modalPhone').href = phone ? `tel:${phone}` : '#';
+
+                    document.getElementById('modalAddress').textContent = address || 'Not Available';
 
                     modal.classList.remove("hidden");
                     modal.classList.add("flex");
                 });
+
             });
 
             // CLOSE MODAL

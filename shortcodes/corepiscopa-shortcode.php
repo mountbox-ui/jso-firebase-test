@@ -27,7 +27,7 @@ function jso_corepiscopa_list_shortcode()
 
             <?php foreach ($corepiscopa as $id => $m):
                 $name = $m['fatherName'] ?? 'Unknown Corepiscopa';
-                $role = $m['vicarAt'] ?? 'Corepiscopa';
+                $role = $m['role'] ?? 'Corepiscopa';
                 $image = $m['image'] ?? $placeholder;
                 $email = $m['emailId'] ?? '';
                 $phone = $m['phoneNumber'] ?? '';
@@ -36,7 +36,7 @@ function jso_corepiscopa_list_shortcode()
 
                 <li class="metro-item flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50 transition"
                     data-name="<?php echo strtolower(esc_attr($name)); ?>"
-                    data-role="<?php echo strtolower(esc_attr($role)); ?>" data-modal-name="<?php echo esc_attr($name); ?>"
+                    data-role="<?php echo strtolower(esc_attr($diocese)); ?>" data-modal-name="<?php echo esc_attr($name); ?>"
                     data-modal-role="<?php echo esc_attr($role); ?>" data-image="<?php echo esc_attr($image); ?>"
                     data-email="<?php echo esc_attr($email); ?>" data-phone="<?php echo esc_attr($phone); ?>"
                     data-diocese="<?php echo esc_attr($diocese); ?>">
@@ -46,7 +46,7 @@ function jso_corepiscopa_list_shortcode()
                             onerror="this.onerror=null;this.src='<?php echo esc_js($placeholder); ?>';" />
                         <div class="min-w-0 flex-auto">
                             <p class="text-sm font-semibold text-gray-900"><?php echo esc_html($name); ?></p>
-                            <p class="mt-1 truncate text-xs text-gray-500"><?php echo esc_html($role); ?></p>
+                            <p class="mt-1 truncate text-xs text-gray-500"><?php echo esc_html($diocese); ?></p>
                         </div>
                     </div>
                 </li>
