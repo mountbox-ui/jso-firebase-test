@@ -17,6 +17,7 @@
 // }
 
 
+
 if (!function_exists('fetch_firebase_data')) {
     function fetch_firebase_data($path, $use_first_project = false)
     {

@@ -1,109 +1,119 @@
 <?php
+// shortcodes/managing-shortcode.php
 
-function shortcode_managing_profiles() {
+if ( ! function_exists( 'jso_managing_profiles_shortcode' ) ) {
 
-    $profiles = fetch_firebase_data('uploads/data', true);
+    function jso_managing_profiles_shortcode() {
 
-    if(empty($profiles)) {
-        return '<p class="text-center py-10 text-gray-500">No profiles found.</p>';
-    }
+        // This one uses the FIRST Firebase project
+        $profiles = fetch_firebase_data('/data', true);
 
-    // Fallback image
-    $fallback_image = get_template_directory_uri() . '/assets/images/church.jpg';
+        if ( empty($profiles) ) {
+            return '<p class="text-center py-10 text-gray-500">No profiles found.</p>';
+        }
 
-    // Safe getter
-    function safe_val($item, $key, $fallback = '') {
-        return isset($item[$key]) && $item[$key] !== '' ? esc_html($item[$key]) : $fallback;
-    }
+        // Fallback image
+        $fallback_image = get_template_directory_uri() . '/assets/images/church.jpg';
 
-    ob_start(); ?>
+        // Safe getter (closure so it won't clash with other files)
+        $get_value = function($item, $field, $fallback = '') {
+            return isset($item[$field]) && $item[$field] !== '' ? esc_html($item[$field]) : $fallback;
+        };
 
-    <ul class="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm outline outline-1 outline-gray-900/5 sm:rounded-xl">
+        ob_start(); ?>
 
-    <?php foreach($profiles as $index => $item): 
+        <ul class="divide-y divide-gray-200 overflow-hidden bg-white shadow-md sm:rounded-xl">
 
-        $photo = isset($item['Photo (90×90)']) && $item['Photo (90×90)'] != '' 
-                    ? esc_url($item['Photo (90×90)']) 
-                    : esc_url($fallback_image);
+        <?php foreach ($profiles as $item):
 
-    ?>
-        <li class="profile-card relative cursor-pointer flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6"
-            data-photo="<?php echo $photo; ?>"
-            data-name="<?php echo safe_val($item,'Name (as-is)'); ?>"
-            data-designation="<?php echo safe_val($item,'Category'); ?>"
-            data-phone="<?php echo safe_val($item,'Phone'); ?>"
-            data-diocese="<?php echo safe_val($item,'Diocese'); ?>"
-            data-parish="<?php echo safe_val($item,'Parish'); ?>"
-            data-address="<?php echo safe_val($item,'Address (single line)'); ?>">
+            $photo = !empty($item['Photo (90×90)'])
+                ? esc_url($item['Photo (90×90)'])
+                : esc_url($fallback_image);
+        ?>
+            <li class="profile-card flex justify-between items-center cursor-pointer px-4 py-5 hover:bg-gray-50 transition"
+                data-photo="<?php echo $photo; ?>"
+                data-name="<?php echo $get_value($item,'Name (as-is)'); ?>"
+                data-designation="<?php echo $get_value($item,'Category'); ?>"
+                data-phone="<?php echo $get_value($item,'Phone'); ?>"
+                data-diocese="<?php echo $get_value($item,'Diocese'); ?>"
+                data-parish="<?php echo $get_value($item,'Parish'); ?>"
+                data-address="<?php echo $get_value($item,'Address (single line)'); ?>">
 
-            <div class="flex min-w-0 gap-x-4 items-center">
-                <img src="<?php echo $photo; ?>" 
-                     alt="<?php echo esc_attr(safe_val($item,'Name (as-is)')); ?>" 
-                     class="w-12 h-12 rounded-full  flex-none object-cover bg-gray-50" />
+                <div class="flex items-center gap-4 min-w-0">
+                    <img 
+                        src="<?php echo $photo; ?>" 
+                        class="w-12 h-12 rounded-full object-cover shadow-sm"
+                        alt="<?php echo $get_value($item,'Name (as-is)'); ?>"
+                    >
 
-                <div class="min-w-0 flex-auto">
-                    <p class="text-sm font-semibold text-gray-900"><?php echo safe_val($item,'Name (as-is)'); ?></p>
-                    <p class="text-sm text-gray-900"><?php echo safe_val($item,'Diocese'); ?></p>
+                    <div class="min-w-0">
+                        <p class="text-sm font-semibold text-gray-900 truncate">
+                            <?php echo $get_value($item,'Name (as-is)'); ?>
+                        </p>
+                        <p class="text-xs text-gray-600 truncate">
+                            <?php echo $get_value($item,'Diocese'); ?>
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="flex shrink-0 items-center gap-x-4">
-                <div class="hidden sm:flex sm:flex-col sm:items-end">
-                    <!-- <p class="text-sm text-gray-900"><?php echo safe_val($item,'Diocese'); ?></p> -->
-                </div>
-                <!-- <svg viewBox="0 0 20 20" class="size-1 text-gray-400">
-                    <path d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"/>
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" class="w-1 h-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg> -->
-            </div>
-        </li>
-    <?php endforeach; ?>
-    </ul>
+            </li>
+        <?php endforeach; ?>
+        </ul>
 
+        <!-- Modal -->
+        <div id="profileModal" class="hidden fixed inset-0 bg-black/50 z-50 flex justify-center items-center">
+            <div class="bg-white rounded-lg shadow-lg w-[90%] max-w-lg p-6 relative">
 
-    <!-- Modal -->
-    <div id="profileModal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-[90%] max-w-lg p-6 relative">
-            <button id="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-black text-xl">✕</button>
+                <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-black text-xl">
+                    ✕
+                </button>
 
-            <div class="flex flex-col items-center text-center gap-3">
-                <img id="modalPhoto" class="w-24 h-24 rounded-full object-cover" src="" />
-                <h2 id="modalName" class="text-lg font-bold"></h2>
-                <p id="modalDesignation" class="text-sm text-gray-600"></p>
-                <p id="modalPhone" class="text-sm text-gray-500"></p>
-                <p id="modalDiocese" class="text-sm text-gray-500"></p>
-                <p id="modalParish" class="text-sm text-gray-500"></p>
-                <p id="modalAddress" class="text-sm text-gray-500"></p>
+                <div class="text-center space-y-3">
+                    <img id="modalPhoto" class="w-24 h-24 rounded-full object-cover mx-auto" src="">
+                    <h2 id="modalName" class="text-lg font-bold"></h2>
+                    <p id="modalDesignation" class="text-sm text-gray-600"></p>
+
+                    <div class="space-y-1 text-sm text-gray-700 pt-2">
+                        <p id="modalPhone"></p>
+                        <p id="modalDiocese"></p>
+                        <p id="modalParish"></p>
+                        <p id="modalAddress"></p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
+        <script>
+        const fallbackImage = "<?php echo esc_url($fallback_image); ?>";
 
-<script>
-const fallbackImage = "<?php echo esc_url($fallback_image); ?>";
+        document.querySelectorAll('.profile-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const modal = document.getElementById('profileModal');
 
-document.querySelectorAll('.profile-card').forEach(card => {
-    card.addEventListener('click', () => {
+                document.getElementById('modalPhoto').src = card.dataset.photo || fallbackImage;
+                document.getElementById('modalName').innerText = card.dataset.name;
+                document.getElementById('modalDesignation').innerText = card.dataset.designation;
+                document.getElementById('modalPhone').innerText = " " + card.dataset.phone;
+                document.getElementById('modalDiocese').innerText = " Diocese: " + card.dataset.diocese;
+                document.getElementById('modalParish').innerText = " Parish: " + card.dataset.parish;
+                document.getElementById('modalAddress').innerText = " " + card.dataset.address;
 
-        let photo = card.dataset.photo || fallbackImage;
+                modal.classList.remove('hidden');
+            });
+        });
 
-        document.getElementById('modalPhoto').src = photo;
-        document.getElementById('modalName').innerText = card.dataset.name;
-        document.getElementById('modalDesignation').innerText = card.dataset.designation;
-        document.getElementById('modalPhone').innerText = " " + card.dataset.phone;
-        document.getElementById('modalDiocese').innerText = " Diocese: " + card.dataset.diocese;
-        document.getElementById('modalParish').innerText = " Parish: " + card.dataset.parish;
-        document.getElementById('modalAddress').innerText = " " + card.dataset.address;
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('profileModal').classList.add('hidden');
+        });
+        </script>
 
-        document.getElementById('profileModal').classList.remove('hidden');
-    });
-});
+        <?php
+        return ob_get_clean();
+    }
 
-document.getElementById('closeModal').addEventListener('click', () => {
-    document.getElementById('profileModal').classList.add('hidden');
-});
-</script>
-
-<?php return ob_get_clean();
+    // Register shortcode name used in the page: [managing_profiles]
+    add_shortcode('managing_profiles', 'jso_managing_profiles_shortcode');
 }
-
-add_shortcode('managing_profiles', 'shortcode_managing_profiles');
