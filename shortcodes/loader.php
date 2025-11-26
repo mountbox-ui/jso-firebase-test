@@ -23,6 +23,7 @@ $shortcode_files = array(
     'deacons-shortcode.php',
     'diocese-shortcode.php',
     'big-father-shortcode.php',
+    'managing-shortcode.php',
 );
 
 // Load each shortcode file
