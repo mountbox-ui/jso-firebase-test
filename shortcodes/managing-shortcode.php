@@ -14,6 +14,7 @@ if ( ! function_exists( 'jso_managing_profiles_shortcode' ) ) {
 
         // Fallback image
         $fallback_image = get_template_directory_uri() . '/assets/images/church.jpg';
+        $uniq = uniqid('managing_');
 
         // Safe getter (closure so it won't clash with other files)
         $get_value = function($item, $field, $fallback = '') {
@@ -21,6 +22,13 @@ if ( ! function_exists( 'jso_managing_profiles_shortcode' ) ) {
         };
 
         ob_start(); ?>
+
+        <div class="mx-auto my-6 mt-5 mb-10">
+            <div class="mb-6 sm:my-5 max-w-lg mx-auto">
+                <input id="<?php echo $uniq; ?>_search" type="text" placeholder="Search Managing profiles..."
+                    class="w-full px-8 py-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 my-6" />
+            </div>
+        </div>
 
         <ul class="divide-y divide-gray-200 overflow-hidden bg-white shadow-md sm:rounded-xl">
 
@@ -47,7 +55,7 @@ if ( ! function_exists( 'jso_managing_profiles_shortcode' ) ) {
                     >
 
                     <div class="min-w-0">
-                        <p class="text-sm font-semibold text-gray-900 truncate">
+                        <p class="text-sm font-semibold text-gray-900 truncate capitalize">
                             <?php echo $get_value($item,'Name (as-is)'); ?>
                         </p>
                         <p class="text-xs text-gray-600 truncate">
